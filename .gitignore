@@ -1,0 +1,18 @@
+node_modules/
+dist/
+.netlify/
+.env
+*.local
+*.log
+.DS_Store
+Thumbs.db
+.dev.err
+.dev.log
+run-dev.bat
+
+# Obsolete StreamHub mobile/supabase artifacts (not part of pipi search)
+android/
+ios/
+supabase/
+capacitor.config.json
+.bolt/
