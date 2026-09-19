@@ -258,7 +258,7 @@ a { color: var(--link); }
   padding: 18px 30px;
 }
 
-.home-logo { border: 0; background: transparent; padding: 0; }
+.home-logo { border: 0; background: transparent; padding: 0; text-decoration: none; display: inline-flex; }
 
 .home-nav { display: flex; align-items: center; gap: 22px; }
 .home-nav-secondary { display: flex; align-items: center; gap: 14px; }
@@ -539,6 +539,20 @@ a { color: var(--link); }
 .private-strip p { margin: 0; font-size: 13px; color: var(--text-soft); line-height: 1.55; }
 .private-strip p strong { display: block; color: var(--accent); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 4px; }
 
+#privacy,
+#about {
+  scroll-margin-top: 90px;
+}
+
+@keyframes pipi-anchor-flash {
+  0% { background-color: color-mix(in srgb, var(--accent) 22%, transparent); }
+  100% { background-color: transparent; }
+}
+#privacy.anchor-flash,
+#about.anchor-flash {
+  animation: pipi-anchor-flash 1.2s ease-out;
+}
+
 .results-footer {
   display: flex;
   align-items: center;
@@ -557,6 +571,36 @@ a { color: var(--link); }
 .spin { animation: pipi-spin 0.9s linear infinite; }
 
 @keyframes pipi-spin { to { transform: rotate(360deg); } }
+
+/* ---------- Detail pages (Privacy / About) ---------- */
+
+.detail-page { min-height: 100vh; }
+
+.detail-nav { gap: 10px; }
+
+.detail-nav .home-link { color: var(--text-soft); }
+.detail-nav .home-link:hover { color: var(--accent); }
+
+.detail-main { max-width: 760px; margin: 0 auto; padding: 60px 22px 80px; width: 100%; }
+
+.detail-hero { margin-bottom: 30px; }
+.detail-hero h1 { margin: 0 0 12px; font-size: 34px; line-height: 1.15; color: var(--text-strong); }
+.detail-lede { margin: 0; max-width: 640px; font-size: 17px; line-height: 1.7; color: var(--text-soft); }
+
+.detail-section { margin: 0 0 22px; padding: 24px 26px; border: 1px solid var(--border-soft); border-radius: 18px; background: var(--bg-soft); }
+.detail-section h2 { margin: 0 0 12px; font-size: 19px; color: var(--text-strong); }
+.detail-section p { margin: 0 0 12px; font-size: 14.5px; line-height: 1.75; color: var(--text-soft); }
+.detail-section p:last-child { margin-bottom: 0; }
+
+.detail-list { margin: 0; padding-left: 20px; display: grid; gap: 9px; }
+.detail-list li { font-size: 14.5px; line-height: 1.65; color: var(--text-soft); }
+.detail-links { list-style: none; padding-left: 0; }
+.detail-links a { color: var(--accent); text-decoration: none; }
+.detail-links a:hover { text-decoration: underline; }
+
+.detail-cta { text-align: center; }
+.detail-cta p { margin-bottom: 18px; }
+.detail-cta .cta { display: inline-flex; }
 
 /* ---------- Responsive ---------- */
 

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 import {
   ArrowLeft,
   ChevronRight,
@@ -82,8 +82,8 @@ function Logo({ size = 'sm' }: { size?: 'lg' | 'sm' }) {
         <PokedexMark id={size} />
       </span>
       <span className="logo-word">
-        <b>Pokdex</b>
-        <i>search</i>
+        <b>POKDEX</b>
+        <i>SEARCH</i>
       </span>
     </span>
   );
@@ -151,6 +151,166 @@ function WikiBox({ wiki }: { wiki: WikiPanel }) {
   );
 }
 
+function DetailShell({ theme, onToggle, children }: { theme: Theme; onToggle: () => void; children: ReactNode }) {
+  return (
+    <div className="pipi-home detail-page">
+      <header className="home-top">
+        <a className="home-logo" href="/" aria-label="Pokdex Search home">
+          <Logo size="sm" />
+        </a>
+        <nav className="home-nav">
+          <div className="home-nav-secondary detail-nav">
+            <a className="home-link" href="/">Home</a>
+            <a className="home-link" href="/about">About</a>
+            <a className="home-link" href="/privacy">Privacy</a>
+            <ThemeToggle theme={theme} onToggle={onToggle} />
+          </div>
+        </nav>
+      </header>
+      <main className="detail-main">{children}</main>
+      <footer className="home-footer">
+        <div className="footer-inner">
+          <nav className="footer-links">
+            <a href="/about">About Pokdex Search</a>
+            <a href="/privacy">Privacy</a>
+            <span>© {new Date().getFullYear()} Pokdex Search</span>
+          </nav>
+          <p className="footer-note">Pokdex Search never tracks, stores, or sells your searches.</p>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+function PrivacyPage() {
+  return (
+    <>
+      <section className="detail-hero">
+        <h1>Privacy, simplified</h1>
+        <p className="detail-lede">
+          Pokdex Search exists for one reason: let you search the web without being watched.
+          No accounts, no trackers, no ad profiles, no saved history.
+        </p>
+      </section>
+
+      <section className="detail-section">
+        <h2>What we never collect</h2>
+        <ul className="detail-list">
+          <li>Your search terms or the pages you open.</li>
+          <li>Your IP address or location.</li>
+          <li>Cookies that follow you around the web.</li>
+          <li>An account, profile, or browsing history.</li>
+          <li>Anything we could sell — there is nothing to sell.</li>
+        </ul>
+      </section>
+
+      <section className="detail-section">
+        <h2>How it works</h2>
+        <p>
+          When you search, your query goes from your browser to our server. The server asks
+          DuckDuckGo (and falls back to Bing if needed), then returns the results to you.
+          Search engines see a request from our server — not from you. We don't log or store the query.
+        </p>
+        <p>
+          Suggestions come from DuckDuckGo's autocomplete, never from your history.
+          The knowledge panel on results pages uses Wikipedia's public API.
+        </p>
+      </section>
+
+      <section className="detail-section">
+        <h2>What we do store</h2>
+        <ul className="detail-list">
+          <li>Your light/dark theme preference — saved in your own browser, it stays on your device.</li>
+          <li>Anonymous hosting logs from Netlify — standard server logs with no search data attached.</li>
+        </ul>
+      </section>
+
+      <section className="detail-section">
+        <h2>What about DuckDuckGo?</h2>
+        <p>
+          Pokdex Search isn't DuckDuckGo, and we can't guarantee what any third-party engine keeps.
+          DuckDuckGo states it doesn't track you — you can read its privacy policy for the details.
+          If an engine ever misbehaves, we'll stop using it.
+        </p>
+      </section>
+
+      <section className="detail-section detail-cta">
+        <p><strong>In short:</strong> your searches are yours. Browsing in private stays private.</p>
+        <a className="cta cta-primary" href="/">Search privately</a>
+      </section>
+    </>
+  );
+}
+
+function AboutPage() {
+  return (
+    <>
+      <section className="detail-hero">
+        <h1>About Pokdex Search</h1>
+        <p className="detail-lede">
+          A small, fast, privacy-first search page with a Pokédex-sized personality.
+          It looks playful, but it's serious about leaving no trail.
+        </p>
+      </section>
+
+      <section className="detail-section">
+        <h2>Why it exists</h2>
+        <p>
+          Most search experiences are built to watch you: track clicks, build a profile, feed you ads.
+          Pokdex Search flips that. There's no account, no history, and no filter bubble —
+          everyone gets the same results for the same query.
+        </p>
+      </section>
+
+      <section className="detail-section">
+        <h2>How it works</h2>
+        <ul className="detail-list">
+          <li>Your query goes to our server, which fetches results from DuckDuckGo with a Bing fallback.</li>
+          <li>Ad links and redirect wrappers are stripped, so you go straight to the page you wanted.</li>
+          <li>A Wikipedia knowledge box appears beside results when a matching article exists.</li>
+          <li>Suggestions are powered by DuckDuckGo's public autocomplete.</li>
+        </ul>
+      </section>
+
+      <section className="detail-section">
+        <h2>The name</h2>
+        <p>
+          “Pokdex” nods to the Pokédex — a catalogue that fills in as you discover. Every search is
+          a fresh page in your own private catalog, and none of it is ever written down.
+        </p>
+      </section>
+
+      <section className="detail-section">
+        <h2>Built with</h2>
+        <p>
+          React + Vite + TypeScript on the front end, Node.js serverless functions on Netlify.
+          The whole project is open source and lives on GitHub — read it, run it, improve it.
+        </p>
+        <ul className="detail-list detail-links">
+          <li>
+            <a href="https://github.com/shafiathusssain-cell/pipi-search" target="_blank" rel="noopener noreferrer">
+              github.com/shafiathusssain-cell/pipi-search
+            </a>
+          </li>
+        </ul>
+      </section>
+
+      <section className="detail-section">
+        <h2>Not affiliated</h2>
+        <p>
+          Pokdex Search is an original project and isn't affiliated with, endorsed by, or connected to
+          Nintendo, The Pokémon Company, or Game Freak. The name and Poké Ball-style badge are this
+          project's own playful take — Pokédex and Pokémon belong to their respective owners.
+        </p>
+      </section>
+
+      <section className="detail-section detail-cta">
+        <a className="cta cta-primary" href="/">Start a private search</a>
+      </section>
+    </>
+  );
+}
+
 export default function App() {
   const [theme, setTheme] = useState<Theme>(readInitialTheme);
   const [input, setInput] = useState<string>(() => readInitialQuery());
@@ -164,6 +324,9 @@ export default function App() {
   const [elapsed, setElapsed] = useState<number>(0);
   const luckyRef = useRef(false);
 
+  const path = window.location.pathname;
+  const page: 'home' | 'results' | 'privacy' | 'about' =
+    path === '/privacy' ? 'privacy' : path === '/about' ? 'about' : query ? 'results' : 'home';
   const view = query ? 'results' : 'home';
 
   useEffect(() => {
@@ -172,8 +335,10 @@ export default function App() {
   }, [theme]);
 
   useEffect(() => {
-    document.title = query ? `${query} - Pokdex Search` : "Pokdex Search - the search engine that doesn't track you";
-  }, [query]);
+    if (page === 'privacy') document.title = 'Privacy - Pokdex Search';
+    else if (page === 'about') document.title = 'About - Pokdex Search';
+    else document.title = query ? `${query} - Pokdex Search` : "Pokdex Search - the search engine that doesn't track you";
+  }, [page, query]);
 
   useEffect(() => {
     function handlePopState() {
@@ -186,6 +351,35 @@ export default function App() {
     }
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  useEffect(() => {
+    function handleAnchorClick(event: MouseEvent) {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+        return;
+      }
+      const anchor = (event.target as Element | null)?.closest?.('a[href^="#"]');
+      if (!anchor) return;
+      const id = anchor.getAttribute('href')?.slice(1);
+      if (!id) return;
+      const target = document.getElementById(id);
+      if (!target) return;
+      event.preventDefault();
+      try {
+        history.replaceState(null, '', `#${id}`);
+      } catch {
+        // ignore
+      }
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      target.classList.add('anchor-flash');
+      window.setTimeout(() => target.classList.remove('anchor-flash'), 1250);
+      const previousTabIndex = target.getAttribute('tabindex');
+      target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      if (previousTabIndex === null) target.removeAttribute('tabindex');
+    }
+    document.addEventListener('click', handleAnchorClick);
+    return () => document.removeEventListener('click', handleAnchorClick);
   }, []);
 
   useEffect(() => {
@@ -272,6 +466,22 @@ export default function App() {
     setTheme((current) => (current === 'dark' ? 'light' : 'dark'));
   }
 
+  if (page === 'privacy') {
+    return (
+      <DetailShell theme={theme} onToggle={toggleTheme}>
+        <PrivacyPage />
+      </DetailShell>
+    );
+  }
+
+  if (page === 'about') {
+    return (
+      <DetailShell theme={theme} onToggle={toggleTheme}>
+        <AboutPage />
+      </DetailShell>
+    );
+  }
+
   if (view === 'home') {
     return (
       <div className="pipi-home">
@@ -280,12 +490,12 @@ export default function App() {
             <Logo size="sm" />
           </button>
           <nav className="home-nav">
-            <a href="#privacy" className="home-link">
+            <a href="/privacy" className="home-link">
               <Shield size={14} />
               Privacy, simplified
             </a>
             <div className="home-nav-secondary">
-              <a href="#about" className="home-link">About</a>
+              <a href="/about" className="home-link">About</a>
               <ThemeToggle theme={theme} onToggle={toggleTheme} />
             </div>
           </nav>
@@ -327,8 +537,8 @@ export default function App() {
               saved, and we never build a profile about you. Results come straight from DuckDuckGo — no sign-up, no cookies, no drama.
             </p>
             <nav className="footer-links">
-              <a href="#about">About Pokdex Search</a>
-              <a href="#privacy">Privacy</a>
+              <a href="/about">About Pokdex Search</a>
+              <a href="/privacy">Privacy</a>
               <span>© {new Date().getFullYear()} Pokdex Search</span>
             </nav>
             <p className="footer-note" id="about">
@@ -351,7 +561,7 @@ export default function App() {
           <SearchField size="sm" value={input} onChange={setInput} onSearch={(q) => goToSearch(q)} />
         </div>
         <nav className="results-nav">
-          <a href="#privacy" className="home-link"><Shield size={14} /> Private</a>
+          <a href="/privacy" className="home-link"><Shield size={14} /> Private</a>
           <ThemeToggle theme={theme} onToggle={toggleTheme} />
         </nav>
       </header>
@@ -415,7 +625,7 @@ export default function App() {
 
         <footer className="results-footer">
           <span>Powered by {source === 'bing' ? 'Bing (fallback)' : 'DuckDuckGo'}</span>
-          <a href="#privacy">Privacy</a>
+          <a href="/privacy">Privacy</a>
           <span>© {new Date().getFullYear()} Pokdex Search</span>
         </footer>
       </main>
