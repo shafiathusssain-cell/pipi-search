@@ -2,7 +2,7 @@
 
 A private search engine — a DuckDuckGo-inspired homepage with a fresh **pipi** logo, no tracking, no saved history, and real web results pulled from DuckDuckGo's index.
 
-🌐 **Live site:** https://pipisearch.netlify.app
+🌐 **Live site:** https://www.pokdex.co.uk
 
 ![Home page](assets/screenshots/home-light.png)
 
