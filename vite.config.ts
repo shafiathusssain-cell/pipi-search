@@ -1,7 +1,7 @@
 import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
-import { searchWeb, autocompleteDuckDuckGo } from './netlify/functions/ddg.mjs';
+import { searchWeb, autocompleteDuckDuckGo, wikiPanel } from './netlify/functions/ddg.mjs';
 
 function sendJson(res: import('node:http').ServerResponse, status: number, body: unknown) {
   res.statusCode = status;
@@ -42,6 +42,17 @@ function pipiSearchApi(): Plugin {
           sendJson(res, 200, { suggests: await autocompleteDuckDuckGo(query) });
         } catch {
           sendJson(res, 200, { suggests: [] });
+        }
+      });
+
+      server.middlewares.use('/api/wiki', async (req, res, next) => {
+        if (req.method !== 'GET') return next();
+        try {
+          const url = new URL(req.url ?? '/', 'http://localhost');
+          const query = url.searchParams.get('q') ?? '';
+          sendJson(res, 200, { wiki: await wikiPanel(query) });
+        } catch {
+          sendJson(res, 200, { wiki: null });
         }
       });
     },

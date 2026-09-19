@@ -4,10 +4,20 @@
       <stop offset="0" stop-color="#ff7a26"/>
       <stop offset="1" stop-color="#e8500a"/>
     </linearGradient>
+    <clipPath id="ballTop">
+      <rect x="0" y="0" width="100" height="47"/>
+    </clipPath>
   </defs>
-  <rect x="2" y="2" width="96" height="96" rx="26" fill="url(#g)"/>
+
+  <rect x="2" y="2" width="96" height="96" rx="24" fill="url(#g)"/>
+
+  <circle cx="47" cy="47" r="23" fill="#fafafa"/>
+  <circle cx="47" cy="47" r="23" fill="#e5402b" clip-path="url(#ballTop)"/>
+  <rect x="24" y="45.3" width="46" height="3.4" rx="1.7" fill="#1d1d1d"/>
+  <circle cx="47" cy="47" r="7.4" fill="#ffffff" stroke="#1d1d1d" stroke-width="2.6"/>
+
   <g fill="none" stroke="#fff" stroke-linecap="round">
-    <circle cx="41" cy="41" r="18" stroke-width="9"/>
-    <line x1="55" y1="55" x2="72" y2="72" stroke-width="12"/>
+    <circle cx="51" cy="51" r="30" stroke-width="5.5"/>
+    <line x1="75" y1="75" x2="94" y2="94" stroke-width="8"/>
   </g>
 </svg>

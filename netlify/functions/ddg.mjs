@@ -56,6 +56,15 @@ function displayUrl(target) {
   }
 }
 
+function isAdTarget(target) {
+  return Boolean(
+    target &&
+      (target.includes('duckduckgo.com/y.js') ||
+        target.includes('bing.com/aclick') ||
+        /[?&](ad_provider|ad_domain|mkt_tok|fbclid|gclid)=/i.test(target)),
+  );
+}
+
 /* ---------------- DuckDuckGo ---------------- */
 
 function resolveDdgTargetUrl(href) {
@@ -94,7 +103,7 @@ export function parseHtmlResults(html) {
 
     const hrefMatch = anchorMatch[0].match(/href="([^"]*)"/);
     const target = resolveDdgTargetUrl(hrefMatch ? hrefMatch[1] : '');
-    if (!target) continue;
+    if (!target || isAdTarget(target)) continue;
 
     const title = textFromHtml(anchorMatch[0]);
     if (!title) continue;
@@ -128,7 +137,7 @@ export function parseLiteResults(html) {
     if (!anchorMatch) continue;
 
     const target = resolveDdgTargetUrl(anchorMatch[1]);
-    if (!target) continue;
+    if (!target || isAdTarget(target)) continue;
 
     const title = textFromHtml(anchorMatch[2]);
     if (!title) continue;
@@ -211,7 +220,7 @@ export function parseBingResults(html) {
     if (!anchorMatch) continue;
 
     const target = resolveBingTargetUrl(anchorMatch[1]);
-    if (!target) continue;
+    if (!target || isAdTarget(target)) continue;
 
     const title = textFromHtml(anchorMatch[2]);
     if (!title) continue;
@@ -366,5 +375,73 @@ export async function autocompleteDuckDuckGo(query) {
     return extractAcPhrases(data).slice(0, 8);
   } catch {
     return [];
+  }
+}
+
+/* ---------------- Wikipedia knowledge box ---------------- */
+
+const WIKI_ENDPOINT = 'https://en.wikipedia.org';
+
+function wikiPageUrl(title) {
+  return `${WIKI_ENDPOINT}/wiki/${encodeURIComponent(String(title).replace(/ /g, '_'))}`;
+}
+
+async function fetchJson(url, signal) {
+  const response = await fetch(url, {
+    headers: { 'User-Agent': USER_AGENT, Accept: 'application/json' },
+    redirect: 'follow',
+    signal,
+  });
+  if (!response.ok) return null;
+  return response.json();
+}
+
+export async function wikiPanel(query) {
+  const trimmed = String(query ?? '').trim();
+  if (!trimmed) return null;
+
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8000);
+  try {
+    const openSearch = await fetchJson(
+      `${WIKI_ENDPOINT}/w/api.php?action=opensearch&search=${encodeURIComponent(
+        trimmed,
+      )}&limit=1&namespace=0&format=json&origin=*`,
+      controller.signal,
+    );
+    const title = Array.isArray(openSearch?.[1]) && openSearch[1][0] ? openSearch[1][0] : null;
+    if (!title) return null;
+
+    const summary = await fetchJson(
+      `${WIKI_ENDPOINT}/api/rest_v1/page/summary/${encodeURIComponent(title)}`,
+      controller.signal,
+    );
+    if (!summary || summary.type === 'disambiguation' || !summary.extract) return null;
+
+    let links = [];
+    const linksData = await fetchJson(
+      `${WIKI_ENDPOINT}/w/api.php?action=query&prop=links&pllimit=6&plnamespace=0&titles=${encodeURIComponent(
+        summary.title ?? title,
+      )}&format=json&origin=*`,
+      controller.signal,
+    );
+    const page = linksData?.query?.pages
+      ? Object.values(linksData.query.pages)[0]
+      : null;
+    if (Array.isArray(page?.links)) {
+      links = page.links.map((entry) => ({ title: entry.title, url: wikiPageUrl(entry.title) }));
+    }
+
+    return {
+      title: summary.title ?? title,
+      description: summary.description ?? null,
+      extract: summary.extract ?? '',
+      thumbnail: summary.thumbnail?.source ?? null,
+      pageUrl: summary.content_urls?.desktop?.page ?? wikiPageUrl(summary.title ?? title),
+      links,
+    };
+  } finally {
+    clearTimeout(timer);
+    controller.abort();
   }
 }

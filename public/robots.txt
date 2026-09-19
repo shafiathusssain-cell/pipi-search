@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://pipisearch.netlify.app/sitemap.xml
+Sitemap: https://www.pokdex.co.uk/sitemap.xml

@@ -1,4 +1,4 @@
-import { searchWeb, autocompleteDuckDuckGo } from './ddg.mjs';
+import { searchWeb, autocompleteDuckDuckGo, wikiPanel } from './ddg.mjs';
 
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), {
@@ -13,12 +13,20 @@ function json(body, status = 200) {
 export default async (request) => {
   const url = new URL(request.url);
   const query = url.searchParams.get('q') ?? '';
-  const type = url.pathname.endsWith('/suggest') ? 'suggest' : url.searchParams.get('type') ?? 'search';
+  const type = url.pathname.endsWith('/suggest')
+    ? 'suggest'
+    : url.pathname.endsWith('/wiki')
+      ? 'wiki'
+      : url.searchParams.get('type') ?? 'search';
   const start = Number(url.searchParams.get('s') ?? '0') || 0;
 
   try {
     if (type === 'suggest') {
       return json({ suggests: await autocompleteDuckDuckGo(query) });
+    }
+
+    if (type === 'wiki') {
+      return json({ wiki: await wikiPanel(query) });
     }
 
     if (!query.trim()) {
@@ -39,5 +47,5 @@ export default async (request) => {
 };
 
 export const config = {
-  path: ['/api/search', '/api/suggest'],
+  path: ['/api/search', '/api/suggest', '/api/wiki'],
 };

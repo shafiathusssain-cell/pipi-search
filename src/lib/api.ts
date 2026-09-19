@@ -18,8 +18,27 @@ export type SuggestPayload = {
   suggests: string[];
 };
 
+export type WikiLink = {
+  title: string;
+  url: string;
+};
+
+export type WikiPanel = {
+  title: string;
+  description: string | null;
+  extract: string;
+  thumbnail: string | null;
+  pageUrl: string;
+  links: WikiLink[];
+};
+
+export type WikiPayload = {
+  wiki: WikiPanel | null;
+};
+
 const SEARCH_ENDPOINT = '/api/search';
 const SUGGEST_ENDPOINT = '/api/suggest';
+const WIKI_ENDPOINT = '/api/wiki';
 
 export async function fetchResults(
   query: string,
@@ -49,4 +68,17 @@ export async function fetchSuggestions(
   if (!response.ok) return [];
   const payload = (await response.json()) as SuggestPayload;
   return Array.isArray(payload.suggests) ? payload.suggests : [];
+}
+
+export async function fetchWiki(
+  query: string,
+  signal?: AbortSignal,
+): Promise<WikiPanel | null> {
+  const response = await fetch(
+    `${WIKI_ENDPOINT}?q=${encodeURIComponent(query)}`,
+    { signal, headers: { Accept: 'application/json' } },
+  );
+  if (!response.ok) return null;
+  const payload = (await response.json()) as WikiPayload;
+  return payload.wiki ?? null;
 }
