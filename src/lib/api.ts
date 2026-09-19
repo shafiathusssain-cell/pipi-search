@@ -36,9 +36,15 @@ export type WikiPayload = {
   wiki: WikiPanel | null;
 };
 
+export type AiPayload = {
+  answer: string;
+  error: string | null;
+};
+
 const SEARCH_ENDPOINT = '/api/search';
 const SUGGEST_ENDPOINT = '/api/suggest';
 const WIKI_ENDPOINT = '/api/wiki';
+const AI_ENDPOINT = '/api/ai';
 
 export async function fetchResults(
   query: string,
@@ -81,4 +87,23 @@ export async function fetchWiki(
   if (!response.ok) return null;
   const payload = (await response.json()) as WikiPayload;
   return payload.wiki ?? null;
+}
+
+export async function fetchAi(
+  query: string,
+  signal?: AbortSignal,
+): Promise<AiPayload> {
+  const params = new URLSearchParams({ q: query });
+  const response = await fetch(`${AI_ENDPOINT}?${params.toString()}`, {
+    signal,
+    headers: { Accept: 'application/json' },
+  });
+  const payload = (await response.json().catch(() => null)) as AiPayload | null;
+  if (!response.ok || !payload) {
+    return {
+      answer: '',
+      error: payload?.error ?? 'AI is unavailable right now.',
+    };
+  }
+  return payload;
 }
