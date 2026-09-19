@@ -106,7 +106,7 @@ function ResultCard({ result }: { result: SearchResult }) {
           <span className="result-favicon">
             <img src={`https://external-content.duckduckgo.com/ip3/${result.hostname}.ico`} alt="" onError={(event) => { event.currentTarget.style.display = 'none'; }} />
           </span>
-          <span>{result.displayUrl}</span>
+          <span className="result-url-text">{result.url || result.displayUrl}</span>
         </span>
         <h3 className="result-title">{result.title}</h3>
       </a>

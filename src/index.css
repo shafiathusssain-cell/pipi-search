@@ -369,8 +369,16 @@ a { color: var(--link); }
   color: var(--text-muted);
   font-size: 12px;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
+}
+
+.result-url-text {
+  min-width: 0;
+  word-break: break-all;
+  white-space: normal;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .result-favicon { flex: none; display: grid; place-items: center; width: 16px; height: 16px; }
