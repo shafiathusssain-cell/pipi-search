@@ -152,6 +152,70 @@ function WikiBox({ wiki }: { wiki: WikiPanel }) {
   );
 }
 
+const AMAZON_FEATURED_ALBUMS: { id: string; title: string; artist: string; image?: string }[] = [
+  { id: 'a1', title: 'Midnight Echoes', artist: 'Lunar Drift', image: 'https://images.pexels.com/photos/5764281/pexels-photo-5764281.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+  { id: 'a2', title: 'Neon Highway', artist: 'The Voltage', image: 'https://images.pexels.com/photos/6842724/pexels-photo-6842724.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+  { id: 'a3', title: 'Velvet Dreams', artist: 'Aria Moon', image: 'https://images.pexels.com/photos/13312404/pexels-photo-13312404.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+  { id: 'a4', title: 'Night Bloom', artist: 'Static Garden', image: 'https://images.pexels.com/photos/8168567/pexels-photo-8168567.png?auto=compress&cs=tinysrgb&h=650&w=940' },
+  { id: 'a5', title: 'Electric Soul', artist: 'The Voltage', image: 'https://images.pexels.com/photos/8699994/pexels-photo-8699994.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+  { id: 'a6', title: 'Afterglow', artist: 'Northbound', image: 'https://images.pexels.com/photos/19404723/pexels-photo-19404723.jpeg?auto=compress&cs=tinysrgb&h=650&w=940' },
+];
+
+function AmazonMusicShelf() {
+  return (
+    <section className="amazon-shelf" aria-label="Listen on Amazon Music">
+      <div className="amazon-shelf-head">
+        <span className="amazon-logo" aria-hidden="true">amazon</span> <span className="amazon-word">music</span>
+        <span className="amazon-shelf-title">Listen on Amazon Music</span>
+      </div>
+      <div className="amazon-albums">
+        {AMAZON_FEATURED_ALBUMS.map((album) => (
+          <a
+            key={album.id}
+            className="amazon-album"
+            href={`https://music.amazon.com/search/${encodeURIComponent(`${album.title} ${album.artist}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={`Listen to ${album.title} by ${album.artist} on Amazon Music`}
+          >
+            {album.image && (
+              <img className="amazon-album-cover" src={album.image} alt="" loading="lazy" />
+            )}
+            <span className="amazon-album-meta">
+              <strong>{album.title}</strong>
+              <span className="amazon-album-artist">{album.artist}</span>
+            </span>
+            <span className="amazon-listen">amazon music ›</span>
+          </a>
+        ))}
+      </div>
+      <form
+        className="amazon-search-row"
+        onSubmit={(event) => {
+          event.preventDefault();
+          const value = (event.currentTarget.elements.namedItem('aq') as HTMLInputElement).value.trim();
+          if (value) {
+            window.open(
+              `https://music.amazon.com/search/${encodeURIComponent(value)}`,
+              '_blank',
+              'noopener,noreferrer'
+            );
+          }
+        }}
+      >
+        <input
+          name="aq"
+          className="amazon-search-input"
+          type="search"
+          placeholder="Search Amazon Music…"
+          aria-label="Search Amazon Music"
+        />
+        <button type="submit" className="amazon-search-go">Search on Amazon</button>
+      </form>
+    </section>
+  );
+}
+
 function AiBox({ query }: { query: string }) {
   const [state, setState] = useState<'loading' | 'ready' | 'error'>('loading');
   const [answer, setAnswer] = useState('');
@@ -225,6 +289,83 @@ function AiBox({ query }: { query: string }) {
 
       <p className="ai-disclaimer">AI-generated answer — always verify with the results above.</p>
     </aside>
+  );
+}
+
+type LegacyWindow = Window & {
+  external?: { AddSearchProvider?: (url: string) => void };
+  sidebar?: { addSearchEngine?: (url: string, icon?: string | null, title?: string) => void };
+};
+
+function MakeDefaultLink({ className = 'home-link' }: { className?: string }) {
+  const [showHelp, setShowHelp] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const descriptor = `${window.location.origin}/opensearch.xml`;
+  const url = `${window.location.origin}/?q=%s`;
+
+  function install() {
+    const legacy = window as LegacyWindow;
+    try {
+      if (legacy.external?.AddSearchProvider) {
+        legacy.external.AddSearchProvider(descriptor);
+      } else if (legacy.sidebar?.addSearchEngine) {
+        legacy.sidebar.addSearchEngine(descriptor, null, 'Pokdex Search');
+      }
+    } catch {
+      // ignore — the dialog below always opens
+    }
+    setShowHelp(true);
+  }
+
+  async function copyUrl() {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      window.setTimeout(() => setCopied(false), 1600);
+    } catch {
+      setCopied(false);
+    }
+  }
+
+  return (
+    <>
+      <button type="button" className={className} onClick={install}>
+        Make Pokdex your default search engine
+      </button>
+
+      {showHelp && (
+        <div className="modal-overlay" role="dialog" aria-modal="true" onClick={() => setShowHelp(false)}>
+          <div className="modal" onClick={(event) => event.stopPropagation()}>
+            <h3>Set Pokdex Search as your default</h3>
+            <p className="modal-note">
+              If your browser showed a small “Add search engine” bubble, just confirm it. Otherwise pick
+              your browser below — browsers block sites from changing the default by themselves.
+            </p>
+            <dl className="modal-steps">
+              <div>
+                <dt>Chrome</dt>
+                <dd>Settings → Search engine → Manage search engines → <em>Add</em> → name <code>Pokdex Search</code>, URL <code>{url}</code> → then <em>Make default</em>.</dd>
+              </div>
+              <div>
+                <dt>Edge</dt>
+                <dd>Settings → Privacy, search and services → Address bar and search → Manage search engines → <em>Add</em> with the same URL, then set it as default.</dd>
+              </div>
+              <div>
+                <dt>Firefox</dt>
+                <dd>On the Pokdex home page click the <em>＋</em> in the search bar to add it, then Settings → Search → choose Pokdex Search.</dd>
+              </div>
+            </dl>
+            <div className="modal-actions">
+              <button type="button" className="cta cta-secondary" onClick={copyUrl}>
+                {copied ? 'URL copied!' : 'Copy search URL'}
+              </button>
+              <button type="button" className="cta cta-primary" onClick={() => setShowHelp(false)}>Got it</button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -1088,6 +1229,7 @@ export default function App() {
                 </>
               }
             />
+            <AmazonMusicShelf />
           </div>
 
           <div className="home-shortcuts" aria-label="Popular searches">
@@ -1097,6 +1239,8 @@ export default function App() {
               </button>
             ))}
           </div>
+
+          <MakeDefaultLink className="default-engine-link" />
         </main>
 
         <footer className="home-footer" id="privacy">

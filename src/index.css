@@ -293,6 +293,84 @@ a { color: var(--link); }
 
 .home-search { width: min(620px, 100%); display: flex; flex-direction: column; gap: 16px; }
 
+.amazon-shelf {
+  background: var(--bg-card, var(--bg-soft));
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  padding: 18px;
+  text-align: left;
+}
+.amazon-shelf-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.amazon-logo {
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: -0.5px;
+  color: #ff9900;
+}
+.amazon-word { font-weight: 800; font-size: 17px; color: var(--text-strong); }
+.amazon-shelf-title { font-size: 12.5px; color: var(--text-muted); margin-left: auto; }
+.amazon-albums {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 10px;
+}
+.amazon-album {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 10px;
+  border: 1px solid var(--border-soft);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--text);
+  transition: all 0.16s;
+  text-decoration: none;
+}
+.amazon-album:hover { border-color: #ff9900; background: var(--bg-hover); }
+.amazon-album-cover {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.amazon-album-meta { display: flex; flex-direction: column; gap: 2px; min-height: 34px; }
+.amazon-album-meta strong { font-size: 13.5px; line-height: 1.3; }
+.amazon-album-artist { font-size: 11.5px; color: var(--text-muted); }
+.amazon-listen { font-size: 11.5px; font-weight: 700; color: #ff9900; }
+.amazon-search-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+.amazon-search-input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: var(--bg);
+  padding: 9px 15px;
+  font-size: 13.5px;
+  color: var(--text);
+}
+.amazon-search-input:focus { outline: none; border-color: #ff9900; }
+.amazon-search-go {
+  border: 0;
+  border-radius: 999px;
+  background: #ff9900;
+  color: #000;
+  font-weight: 700;
+  font-size: 12.5px;
+  padding: 0 16px;
+  cursor: pointer;
+  transition: opacity 0.16s;
+}
+.amazon-search-go:hover { opacity: 0.88; }
+
 .home-shortcuts {
   display: flex;
   flex-wrap: wrap;
@@ -311,6 +389,49 @@ a { color: var(--link); }
   transition: all 0.16s;
 }
 .shortcut-chip:hover { color: var(--accent); border-color: var(--accent); background: var(--bg-hover); }
+
+.default-engine-link {
+  margin-top: 18px;
+  border: 1px solid var(--border-soft);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 16px;
+  transition: all 0.16s;
+}
+.default-engine-link:hover { color: var(--accent); border-color: var(--accent); background: var(--bg-hover); }
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(10, 6, 2, 0.55);
+}
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  background: var(--bg);
+  color: var(--text);
+  border: 1px solid var(--border-soft);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+}
+.modal h3 { margin: 0 0 8px; font-size: 19px; color: var(--text-strong); }
+.modal-note { margin: 0 0 16px; font-size: 13.5px; color: var(--text-soft); }
+.modal-steps { margin: 0; display: grid; gap: 14px; }
+.modal-steps dt { font-size: 13px; font-weight: 700; color: var(--accent); margin-bottom: 3px; }
+.modal-steps dd { margin: 0; font-size: 13px; line-height: 1.6; color: var(--text-soft); }
+.modal-steps code { background: var(--bg-soft); border: 1px solid var(--border-soft); border-radius: 6px; padding: 1px 6px; font-size: 12px; word-break: break-all; }
+.modal-actions { display: flex; justify-content: flex-end; margin-top: 20px; }
 
 .home-footer { margin-top: auto; border-top: 1px solid var(--border-soft); padding: 26px 30px; }
 

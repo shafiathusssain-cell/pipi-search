@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Pokdex Search</ShortName>
+  <Description>Pokdex Search — the private search engine that doesn't track you.</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <OutputEncoding>UTF-8</OutputEncoding>
+  <LongName>Pokdex Search</LongName>
+  <Tags>search privacy private search engine pokdex</Tags>
+  <Url type="text/html" method="get" template="https://pookdex.netlify.app/?q={searchTerms}" />
+  <Url type="application/x-suggestions+json" method="get" template="https://pookdex.netlify.app/api/suggest?q={searchTerms}" />
+  <Image height="16" width="16" type="image/svg+xml">https://pookdex.netlify.app/favicon.svg</Image>
+  <Query role="example" searchTerms="pokemon" />
+  <Developer>Pokdex Search</Developer>
+  <Contact>https://pookdex.netlify.app/wiki</Contact>
+  <Attribution>Pokdex Search — search the web privately.</Attribution>
+  <SyndicationRight>open</SyndicationRight>
+  <AdultContent>false</AdultContent>
+  <Language>en</Language>
+</OpenSearchDescription>
